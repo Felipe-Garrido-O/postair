@@ -12,7 +12,7 @@ jobs:
       - name: Run Postman Collection
         run: curl -o-"https://dl-cli.pstm.io/install/linux64.sh" | sh
       - name: Login to Postman 
-        run: postman login 
+        run: postman login --with-api-key ${{secrets.APIKEY}}
       - name: Run PostAir test suite
         run: postman collection run ${{secrets.COLLECTION_ID}} -e ${{secrets.ENVIRONMENT_ID}}
          
