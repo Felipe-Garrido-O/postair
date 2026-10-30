@@ -1,0 +1,36 @@
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  postman-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install Postman CLI
+        run: npm install -g newman
+
+      - name: Run Postman Collection
+        run: curl -o-"https://dl-cli.pstm.io/install/linux64.sh" | sh
+      - name: Login to Postman
+        run: postman login --with-api-key ${{ secrets.APIKEY }}
+      - name: Run PostAir test suite
+        run: postman collection run ${{secrets.COLLECTION_ID}} -e ${{secrets.ENVIRONMENT_ID}}
+         
+      # "https://api.getpostman.com/collections/${{ secrets.POSTMAN_COLLECTION_ID }}?apikey=${{ secrets.POSTMAN_API_KEY }}" \
+      # --environment \
+      # "https://api.getpostman.com/environments/${{ secrets.POSTMAN_ENVIRONMENT_ID }}?apikey=${{ secrets.POSTMAN_API_KEY }}" \
+      # --reporters cli,junit \
+      # --reporter-junit-export results.xml
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: results
+          path: results.xml
