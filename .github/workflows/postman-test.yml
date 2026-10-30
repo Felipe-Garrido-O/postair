@@ -10,7 +10,13 @@ jobs:
     
     steps:
       - name: Run Postman Collection
-        run: curl -o-"https://dl-cli.pstm.io/install/linux64.sh" | sh
+        run: #curl -o- "https://dl-cli.pstm.io/install/linux64.sh" | sh
+             curl -o- "https://dl-cli.pstmn.io/install/unix.sh" | sh
+             echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Verify Postman CLI
+        run: |
+          which postman
+          postman --version       
       - name: Login to Postman 
         run: postman login --with-api-key ${{secrets.APIKEY}}
       - name: Run PostAir test suite
