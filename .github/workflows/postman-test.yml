@@ -14,26 +14,39 @@ jobs:
           curl -o- "https://dl-cli.pstmn.io/install/unix.sh" | sh
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
         # run: #curl -o- "https://dl-cli.pstm.io/install/linux64.sh" | sh
-        #      curl -o- "https://dl-cli.pstmn.io/install/unix.sh" | sh
-        #      echo "$HOME/.local/bin" >> "$GITHUB_PATH"
       - name: Verify Postman CLI
         run: |
           which postman
           postman --version       
       - name: Login to Postman 
         run: postman login --with-api-key ${{secrets.APIKEY}}
+        
+      - name: Run PostAir test suite
+        run: |
+          mkdir -p postman-cli-reports
+  
       - name: Run PostAir test suite
         run: postman collection run ${{secrets.COLLECTION_ID}} -e ${{secrets.ENVIRONMENT_ID}}
          
-      # "https://api.getpostman.com/collections/${{ secrets.POSTMAN_COLLECTION_ID }}?apikey=${{ secrets.POSTMAN_API_KEY }}" \
-      # --environment \
-      # "https://api.getpostman.com/environments/${{ secrets.POSTMAN_ENVIRONMENT_ID }}?apikey=${{ secrets.POSTMAN_API_KEY }}" \
       # --reporters cli,junit \
       # --reporter-junit-export results.xml
+       --reporters cli,html,junit \
+       --reporter-html-export reports/postair-report.html \
+       --reporter-junit-export reports/postair-report.xml 
+      
 
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: postair-reports
+          path: reports/
+          if-no-files-found: warn
+      
       # - name: Upload test results
       #   uses: actions/upload-artifact@v3
       #   if: always()
       #   with:
       #     name: results
       #     path: results.xml
+      
