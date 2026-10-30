@@ -3,8 +3,9 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
- 
-  workflow_dispatch: # Permite ejecución manual únicamente    
+
+# on: 
+#   workflow_dispatch: # Permite ejecución manual únicamente    
 
 jobs:
   postman-tests:
