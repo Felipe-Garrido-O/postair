@@ -28,9 +28,9 @@ jobs:
       # --reporters cli,junit \
       # --reporter-junit-export results.xml
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: results
-          path: results.xml
+      # - name: Upload test results
+      #   uses: actions/upload-artifact@v3
+      #   if: always()
+      #   with:
+      #     name: results
+      #     path: results.xml
