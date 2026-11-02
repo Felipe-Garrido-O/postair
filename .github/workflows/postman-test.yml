@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: postair-reports
-          path: reports/
+          path: postman-cli-reports/
           if-no-files-found: warn
       
       # - name: Upload test results
