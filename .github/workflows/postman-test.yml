@@ -25,16 +25,16 @@ jobs:
         
       - name: Run PostAir test suite
         run: |
-          mkdir -p postman-cli-reports
+          mkdir -p reports
   
       - name: Run PostAir test suite
         run: postman collection run ${{secrets.COLLECTION_ID}} -e ${{secrets.ENVIRONMENT_ID}} \
              --reporters cli,html,junit \
              --reporter-html-export reports/postair-report.html \
+             --reporter-junit-export reports/postair-report.xml
       # --reporters cli,junit \
       # --reporter-junit-export results.xml
-      # --reporter-junit-export reports/postair-report.xml 
-      
+            
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
